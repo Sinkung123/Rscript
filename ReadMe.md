@@ -219,4 +219,4 @@ book_rt_plot + ggtitle("Rating Average of Type Book") +
 ```
 Result:
 
-![Graph 2](Rplot2.png)
+![Graph 2](plot2.png)
