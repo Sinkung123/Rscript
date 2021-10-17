@@ -1,6 +1,6 @@
 # R-Assignment 4
 
-**Created by Run Lertjitthamrong (ID: 63130500101)**
+**Created by Wasin Sukeesup (ID: 63130500104)**
 
 Choose Dataset:
 1. Top 270 Computer Science / Programing Books (Data from Thomas Konstantin, [Kaggle](https://www.kaggle.com/thomaskonstantin/top-270-rated-computer-science-programing-books)) >> [Using CSV](https://raw.githubusercontent.com/safesit23/INT214-Statistics/main/datasets/prog_book.csv)
@@ -17,10 +17,10 @@ Choose Dataset:
 # Library
 library(dplyr)
 library(readr)
-library(ggplot2)
+library("ggplot2")
 library(forcats)
 
-# Dataset
+#Load data
 books <- read_csv("https://raw.githubusercontent.com/safesit23/INT214-Statistics/main/datasets/prog_book.csv")
 ```
 
@@ -43,22 +43,23 @@ ggplot(aes(x = fct_infreq(Type),y = n)) + geom_bar(stat="identity")
 
 ## Part 3: Transform data with dplyr and finding insight the data
 
-1. Find out how many books in each type of this dataset are there.
-
+1 What is the average review of each book type?
 ```
-books %>% mutate(Type = fct_lump(Type,n=4)) %>% count(Type,sort = T)
+books %>% mutate(Type = fct_lump(Type,n=5)) %>%  group_by(Type) %>%
+  summarise(mean = mean(Reviews, na.rm = TRUE))
 ```
 
 Result:
 
 ```
-  Type               n
-  <fct>          <int>
-1 Paperback        156
-2 Hardcover         95
-3 Kindle Edition    10
-4 ebook              7
-5 Other              3
+  Type                   mean
+  <fct>                 <dbl>
+1 Boxed Set - Hardcover  36  
+2 ebook                  51.4
+3 Hardcover             315. 
+4 Kindle Edition        156. 
+5 Paperback             116. 
+6 Unknown Binding       124. 
 ```
 //Explain
 
