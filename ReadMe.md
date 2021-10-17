@@ -67,42 +67,17 @@ Result:
 - list 2
 
 
-2. What is the average rating of each book type?
+2 What is the average price of each book type?
 
 ```
 books %>% mutate(Type = fct_lump(Type,n=5)) %>%  group_by(Type) %>%
-  summarise(mean = mean(Rating, na.rm = TRUE))
+  summarise(Price = mean(Price, na.rm = TRUE))
 ```
 
 Result:
 
 ```
-  Type                   mean
-  <fct>                 <dbl>
-1 Boxed Set - Hardcover  4.49
-2 ebook                  4.29
-3 Hardcover              4.06
-4 Kindle Edition         4.01
-5 Paperback              4.06
-6 Unknown Binding        3.99
-```
-//Explain
-
-- list 1
-- list 2
-
-
-3. What is the average price of each type of book?
-
-```
-books %>% mutate(Type = fct_lump(Type,n=6)) %>%  group_by(Type) %>%
-  summarise(mean = mean(Price, na.rm = TRUE))
-```
-
-Result:
-
-```
-  Type                   mean
+    Type                  Price
   <fct>                 <dbl>
 1 Boxed Set - Hardcover 220. 
 2 ebook                  51.4
@@ -117,27 +92,25 @@ Result:
 - list 2
 
 
-4. Find out which books have ratings more than 4.50.
+3 What is the average rating of each book type?
 
 ```
-books %>% select(Book_title,Number_Of_Pages,Price,Rating) %>% filter(Rating > 4.50)
+books %>% mutate(Type = fct_lump(Type,n=5)) %>%  group_by(Type) %>%
+  summarise(Rate = mean(Rating, na.rm = TRUE))
 ```
 
 Result:
 
 ```
-Book_title                                       Number_Of_Pages Price Rating
-   <chr>                                                      <dbl> <dbl>  <dbl>
- 1 ZX Spectrum Games Code Club: Twenty fun games t~             128  14.6   4.62
- 2 Your First App: Node.js                                      317  25.9   5   
- 3 The Elements of Computing Systems: Building a M~             325  41.3   4.54
- 4 Build Web Applications with Java: Learn every a~             372  42.3   4.67
- 5 Designing Data-Intensive Applications: The Big ~             616  45.6   4.72
- 6 The Linux Programming Interface: A Linux and Un~            1506  46.4   4.62
- 7 Practical Object Oriented Design in Ruby                     247  50.1   4.54
- 8 Fluent Python: Clear, Concise, and Effective Pr~             792  64.1   4.67
- 9 CLR via C# (Developer Reference)                             863  66.3   4.58
-10 The Art of Computer Programming, Volumes 1-4a B~            3168 220.    4.77
+  Type                   Rate
+  <fct>                 <dbl>
+1 Boxed Set - Hardcover  4.49
+2 ebook                  4.29
+3 Hardcover              4.06
+4 Kindle Edition         4.01
+5 Paperback              4.06
+6 Unknown Binding        3.99
+
 ```
 //Explain
 
@@ -145,10 +118,10 @@ Book_title                                       Number_Of_Pages Price Rating
 - list 2
 
 
-5. Find out how many books are rating less than the average of each type book.
+4 Find out how many books are Number_Of_Pages less than the average of each type book.
 
 ```
-books %>% filter(Rating < mean(Rating, na.rm = TRUE)) %>% group_by(Type) %>% count()
+books %>% filter(Number_Of_Pages < mean(Number_Of_Pages, na.rm = TRUE)) %>% group_by(Type) %>% count()
 ```
 
 Result:
@@ -156,11 +129,11 @@ Result:
 ```
   Type                n
   <chr>           <int>
-1 ebook               2
-2 Hardcover          49
-3 Kindle Edition      6
-4 Paperback          66
-5 Unknown Binding     1
+1 ebook               5
+2 Hardcover          41
+3 Kindle Edition     10
+4 Paperback         121
+5 Unknown Binding     2
 ```
 //Explain
 
@@ -168,23 +141,47 @@ Result:
 - list 2
 
 
-6. How many books have less than 200 reviews and a rating of more than 4.00 by grouping by book type.
-
+5 Find out which books have review more than 1500.
 ```
-books %>% filter(Reviews < 200 & Rating > 4.00 ) %>% group_by(Type) %>% count()
+books %>% select(Book_title,Reviews,Price,Rating) %>% filter(Reviews > 1500)
 ```
 
 Result:
 
 ```
-  Type                      n
-  <chr>                 <int>
-1 Boxed Set - Hardcover     1
-2 ebook                     6
-3 Hardcover                48
-4 Kindle Edition            5
-5 Paperback                79
-6 Unknown Binding           1
+  Book_title                                                                                Reviews Price Rating
+  <chr>                                                                                       <dbl> <dbl>  <dbl>
+1 The Elements of Style                                                                        3829  9.32   4.17
+2 Ghost in the Wires: My Adventures as the World's Most Wanted Hacker                          1658 12.9    3.97
+3 Start with Why: How Great Leaders Inspire Everyone to Take Action                            5938 14.2    4.09
+4 Algorithms to Live By: The Computer Science of Human Decisions                               1817 14.4    4.15
+5 Weapons of Math Destruction: How Big Data Increases Inequality and Threatens Democracy       2093 14.5    3.87
+6 The Innovators: How a Group of Hackers, Geniuses and Geeks Created the Digital Revolution    2092 17.2    4.1 
+7 The Phoenix Project: A Novel About IT, DevOps, and Helping Your Business Win                 2629 24.3    4.27
+8 The Goal: A Process of Ongoing Improvement                                                   2290 37.1    4.05
+```
+//Explain
+
+- list 1
+- list 2
+
+
+6 How many books have less than 300 Number_Of_Pages and a Reviews of less than 100 by grouping by book type.
+
+```
+books %>% filter(Number_Of_Pages < 300 & Reviews < 1000 ) %>% group_by(Type) %>% count()
+```
+
+Result:
+
+```
+  Type                n
+  <chr>           <int>
+1 ebook               3
+2 Hardcover          10
+3 Kindle Edition      3
+4 Paperback          50
+5 Unknown Binding     2
 ```
 //Explain
 
@@ -193,30 +190,30 @@ Result:
 
 
 ## Part 4: Visualization with GGplot2
-### 1.) The bar chart represents the number of books of each type.
+### 1.) The bar chart represents the average review of each book type.
 ```
-book_price_plot <- books %>% mutate(Type = fct_lump(Type,n=4)) %>% count(Type,sort = T)
+bookReview_plot <- books %>% mutate(Type = fct_lump(Type,n=5)) %>%  group_by(Type) %>%
+  summarise(mean = mean(Reviews, na.rm = TRUE))
 
-#GGplot2
-book_price_plot <- book_price_plot %>% ggplot(aes(x = fct_infreq(Type),y = n)) + geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+bookReview_plot <- bookReview_plot %>% ggplot(aes(x = fct_infreq(Type),y = mean)) + geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
   coord_flip() + theme_bw()
 
-book_price_plot + ggtitle("Price Average of Type Book") + xlab("Type") + ylab("Price average")
+bookReview_plot + ggtitle("Reviews average of Type Book") + xlab("Type") + ylab("Reviews average")
 ```
 Result:
 
 ![Graph 1](plot1.png)
 
 
-### 2.) The chart shows the ratings of each book type.
+### 2.) The chart shows the average price of each book type.
 ```
-book_rt_plot <- books %>% mutate(Type = fct_lump(Type,n=5)) %>%  group_by(Type) %>%
-  summarise(mean = mean(Rating, na.rm = TRUE))
-#GGplot2
-book_rt_plot <- book_rt_plot %>% ggplot(aes(x = Type,y = mean)) + geom_point(aes(color=Type)) 
+bookPrice_plot <- books %>% mutate(Type = fct_lump(Type,n=5)) %>%  group_by(Type) %>%
+  summarise(Price = mean(Price, na.rm = TRUE))
 
-book_rt_plot + ggtitle("Rating Average of Type Book") +
-  xlab("Type") + ylab("Rating average")
+bookPrice_plot <- bookPrice_plot %>% ggplot(aes(x = Type,y = Price)) + geom_point(mapping = aes(x = Type,y = Price))
+
+bookPrice_plot + ggtitle("Price Average of Type Book") +
+  xlab("Type") + ylab("Price average")
 ```
 Result:
 
